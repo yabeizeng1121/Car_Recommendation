@@ -155,17 +155,20 @@
 
 <script>
     window.onload = function() {
+        const resultText = document.getElementById('resultText');
         const loader = document.getElementById('loadingContent');
         const result = document.getElementById('result');
-        const resultText = document.getElementById('resultText');
-    
-        // Simulate fetching data
-        setTimeout(() => {  // Assume data is fetched here
+
+        // Retrieve data from sessionStorage
+        const carResults = sessionStorage.getItem('carResults');
+
+        setTimeout(() => {  // Simulate delay
             loader.style.display = 'none';
-            resultText.textContent = 'Here is your recommended car information...'; // Sample text
+            resultText.textContent = carResults || 'No results found.';
             result.style.display = 'block';
-        }, 3000); // Delay for demonstration
+        }, 3000);
     };
+
     </script>
     
 </body>

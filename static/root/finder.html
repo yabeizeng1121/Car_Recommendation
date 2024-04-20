@@ -275,7 +275,7 @@
         const carType = document.getElementById('carType').value;
         const additionalPreferences = document.getElementById('textInput').value;
 
-        return `Recommend a${carType} ${seats} seats car with a ${engineType} engine between ${minBudget} and ${maxBudget} dollars. ${additionalPreferences}`;
+        return `Recommend a car for me: ${carType} ${seats} seats car with a ${engineType} engine between ${minBudget} and ${maxBudget} dollars. Additional preferences:${additionalPreferences}.Don't cut off`;
     }
 
    
@@ -288,10 +288,14 @@
             body: JSON.stringify({ prompt: prompt })
         });
         if (response.ok) {
-            window.location.href = '/car.html'; // Redirect to car.html
+            response.json().then(data => {
+                sessionStorage.setItem('carResults', data.step1_and_step2);
+                window.location.href = '/car.html'; // Redirect to car.html
+            });
         } else {
             alert('Failed to find car');
         }
+
     };
 </script>
 
