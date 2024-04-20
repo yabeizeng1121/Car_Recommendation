@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 use reqwest::Client;
 use dotenv::dotenv;
 use std::env;
+use log::{info, error};
+use env_logger;
 
 #[derive(Deserialize, Debug)]
 struct CarQuery {
@@ -15,26 +17,34 @@ struct ApiResponse {
     step1_and_step2: String,
 }
 
+
+
 async fn handle_find_my_car(query: web::Json<CarQuery>) -> impl Responder {
-    println!("Received prompt: {:?}", query.prompt);
+    info!("Received prompt: {:?}", query.prompt);
     
     match call_model_api(&query.prompt).await {
         Ok(api_response) => {
+            info!("API Response: {:?}", api_response);  // Log the full response
             if let Ok(response_json) = serde_json::from_str::<serde_json::Value>(&api_response) {
                 if let Some(generated_text) = response_json["generated_text"].as_str() {
-                    let steps: Vec<&str> = generated_text.split("Step 3/5").collect();
-                    let steps_text = steps.get(0).unwrap_or(&"").to_string();
-                    HttpResponse::Ok().json(ApiResponse { step1_and_step2: steps_text })
+                    // ... existing code
                 } else {
+                    error!("No 'generated_text' found in API response");
                     HttpResponse::InternalServerError().finish()
                 }
             } else {
+                error!("Failed to parse API response as JSON");
                 HttpResponse::InternalServerError().finish()
             }
         },
-        Err(_) => HttpResponse::BadRequest().finish()
+        Err(e) => {
+            error!("Failed to call model API: {:?}", e);
+            HttpResponse::InternalServerError().finish()
+        }
     }
 }
+
+
 
 async fn call_model_api(prompt: &str) -> Result<String, reqwest::Error> {
     dotenv().ok();
@@ -54,6 +64,7 @@ async fn call_model_api(prompt: &str) -> Result<String, reqwest::Error> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::init();
     HttpServer::new(|| {
         App::new()
             .wrap(middleware::Logger::default()) // Logging middleware
