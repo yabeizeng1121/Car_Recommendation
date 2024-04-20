@@ -61,7 +61,7 @@ async fn call_model_api(prompt: &str) -> Result<String, reqwest::Error> {
     let api_key = env::var("HUGGINGFACE_API_KEY").expect("API key must be set in .env");
     
     let client = Client::new();
-    let model_endpoint = "https://api-inference.huggingface.co/models/google/gemma-7b";
+    let model_endpoint = "https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1";
     
     client.post(model_endpoint)
         .header("Authorization", format!("Bearer {}", api_key))
