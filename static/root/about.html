@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Varela&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-	<link rel="stylesheet" href="styles.css">
+	<!-- <link rel="stylesheet" href="styles.css"> -->
     <style>
         /* Basic Reset */
         body, h1, h2, h3, p, a {
@@ -60,6 +60,91 @@
             padding: 20px;
             line-height: 2;       /* Optional: add padding if needed */
         }
+        .wrapper{
+          margin-top: 60px;
+          text-align: center;
+        }
+
+        .wrapper h1{
+            font-family: 'Varela', sans-serif;
+          font-size: 48px;
+          color: black;
+          margin-bottom: 25px;
+        }
+
+        .our_team{
+          width: auto;
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        .our_team .team_member{
+          width: 250px;
+          margin: 5px;
+          background: #fff;
+          padding: 20px 10px;
+        }
+
+        .our_team .team_member .member_img{
+          background: #ffffff;  
+          max-width: 190px;
+          width: 100%;
+          height: 190px;
+          margin: 0 auto;
+          border-radius: 50%;
+          padding: 5px;
+          position: relative;
+          cursor: pointer;
+        }
+
+        .our_team .team_member .member_img img{
+          width: 100%;
+          height: 100%;
+        }
+
+        .our_team .team_member h3{
+          text-transform: uppercase;
+          font-size: 18px;
+          line-height: 18px;
+          letter-spacing: 2px;
+          margin: 15px 0 0px;
+        }
+
+        .our_team .team_member span{
+          font-size: 10px;
+        }
+
+        .our_team .team_member p{
+          margin-top: 20px;
+          font-size: 14px;
+          line-height: 20px;
+        }
+
+        .our_team .team_member .member_img .social_media{
+          position: absolute;
+          top: 5px;
+          left: 5px;
+          background: rgba(0,0,0,0.65);
+          width: 95%;
+          height: 95%;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transform: scale(0);
+          transition: all 0.5s ease;
+        }
+
+.our_team .team_member .member_img .social_media .item{
+  margin: 0 10px;
+}
+
+.our_team .team_member .member_img .social_media .fab{
+  color: maroon;
+  font-size: 20px;
+}
+
     </style>
 </head>
 <body>
