@@ -52,7 +52,7 @@ async fn call_model_api(prompt: &str) -> Result<String, reqwest::Error> {
     let api_key = env::var("HUGGINGFACE_API_KEY").expect("API key must be set in .env");
     
     let client = Client::new();
-    let model_endpoint = "https://api.replicate.com/v1/models/meta/meta-llama-3-70b-instruct/predictions";
+    let model_endpoint = "https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1";
     
     client.post(model_endpoint)
         .header("Authorization", format!("Bearer {}", api_key))
