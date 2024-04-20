@@ -6,16 +6,17 @@ use dotenv::dotenv;
 use std::env;
 use log::{info, error};
 use env_logger;
-use serde_json::{Value, json};
+use serde_json::Value;
 
 #[derive(Deserialize, Debug)]
+
 struct CarQuery {
     prompt: String,
 }
 
 #[derive(Serialize)]
 struct ApiResponse {
-    steps: String, // Changed from 'step1_and_step2' to 'steps' to reflect full steps handling
+    step1_and_step2: String,
 }
 
 async fn handle_find_my_car(query: web::Json<CarQuery>) -> impl Responder {
@@ -23,20 +24,26 @@ async fn handle_find_my_car(query: web::Json<CarQuery>) -> impl Responder {
 
     match call_model_api(&query.prompt).await {
         Ok(api_response) => {
-            info!("API Response: {:?}", api_response);
-            match serde_json::from_str::<Value>(&api_response) {
-                Ok(response_value) => {
-                    if let Some(output) = response_value["output"].as_array() {
-                        let steps_text: Vec<String> = output.iter().map(|s| s.as_str().unwrap_or("").to_string()).collect();
-                        HttpResponse::Ok().json(ApiResponse { steps: steps_text.join("") })
+            info!("API Response: {:?}", api_response); // Log the full response
+            match serde_json::from_str::<Vec<Value>>(&api_response) { // Parse as Vec<Value> since the response is an array
+                Ok(response_array) => {
+                    if let Some(response_object) = response_array.get(0) { // Get the first object in the array
+                        if let Some(generated_text) = response_object["generated_text"].as_str() { // Now get generated_text from this object
+                            let steps: Vec<&str> = generated_text.split("Step 3/5").collect();
+                            let steps_text = steps.get(0).unwrap_or(&"").to_string();
+                            HttpResponse::Ok().json(ApiResponse { step1_and_step2: steps_text })
+                        } else {
+                            error!("No 'generated_text' found in API response");
+                            HttpResponse::InternalServerError().json("No 'generated_text' found in API response")
+                        }
                     } else {
-                        error!("No 'output' found in API response");
-                        HttpResponse::InternalServerError().json("No 'output' found in API response")
+                        error!("API response array is empty");
+                        HttpResponse::InternalServerError().json("API response array is empty")
                     }
                 },
                 Err(e) => {
-                    error!("Failed to parse API response: {:?}", e);
-                    HttpResponse::InternalServerError().json(format!("Failed to parse API response: {:?}", e))
+                    error!("Failed to parse API response as JSON array: {:?}", e);
+                    HttpResponse::InternalServerError().json("Failed to parse API response as JSON array")
                 }
             }
         },
@@ -47,16 +54,18 @@ async fn handle_find_my_car(query: web::Json<CarQuery>) -> impl Responder {
     }
 }
 
+
+
 async fn call_model_api(prompt: &str) -> Result<String, reqwest::Error> {
     dotenv().ok();
     let api_key = env::var("HUGGINGFACE_API_KEY").expect("API key must be set in .env");
     
     let client = Client::new();
-    let model_endpoint = "https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1";
+    let model_endpoint = "https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1";
     
     client.post(model_endpoint)
         .header("Authorization", format!("Bearer {}", api_key))
-        .json(&json!({"input": {"prompt": prompt}}))  // Updated the structure to match what the API expects
+        .json(&serde_json::json!({"inputs": prompt}))
         .send()
         .await?
         .text()
@@ -94,3 +103,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
+
