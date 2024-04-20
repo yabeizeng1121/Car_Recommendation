@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Car Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Varela&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+	<link rel="stylesheet" href="styles.css">
+    <style>
+        /* Basic Reset */
+        body, h1, h2, h3, p, a {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Navigation Bar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0f0f0f;
+            min-height: 80px;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .navbar a {
+            color: white;
+            padding: 0 15px;
+            margin-left: 15px;
+            font-weight: bold;
+        }
+
+
+        .hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("imgs/newcar.jpg");
+            background-size: cover;
+            background-position: center;
+            color: #FBEEE6;
+            text-align: left;
+            padding: 20px;
+            display: block;  /* Using block layout */
+            position: relative; /* Needed for absolute positioning of children */
+            height: 500px;
+            font-family: 'Varela', sans-serif;
+        }
+
+        .hero-content {
+            position: absolute;  /* Absolutely positioned content */
+            bottom: 20px;           /* Align to the bottom */
+            left: 0px;             /* Align to the left */
+            width: 50%;         /* Full width to respect padding of .hero */
+            padding: 20px;
+            line-height: 2;       /* Optional: add padding if needed */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+    <div>Ultimate Car Finder</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="finder.html">Find My Car</a>
+    </div>
+</div>
+<!-- Hero Section -->
+<div class="hero">
+    <div class="hero-content">
+        <h1>About Us</h1>
+        <p> Welcome to our car recommendation website application. We are a team of students from the Master of Interdisciplinary Data Science (MIDS) program at Duke University. Do feel free to explore and hope you find this APP helpful! </p>
+    </div>
+</div>
+
+<div class="wrapper">
+    <h1>Our Team</h1>
+    <div class="our_team">
+        <div class="team_member">
+          <div class="member_img">
+             <img src="imgs/member1.png" alt="our_team">
+            <div class="social_media">
+                <div class="github item">
+                    <a href="https://github.com/TianoRao" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-github"></i>
+                    </a>
+                  </div>
+                  <div class="gitlab item">
+                    <a href="https://gitlab.com/TianoRao" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-gitlab"></i>
+                    </a>
+                  </div>
+                  <div class="email item">
+                    <a href="mailto:tianjirao08@gmail.com">
+                      <i class="fab fa-pushed"></i> <!-- Changed to the envelope icon -->
+                    </a>
+                  </div>
+                  <div class="linkedin item">
+                    <a href="https://www.linkedin.com/in/tianji-rao/" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-linkedin"></i>
+                    </a>
+                  </div>
+                  
+             </div>
+          </div>
+          <h3>Tianji Rao</h3>
+          <span>Duke Student</span>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione perspiciatis, error deleniti quaerat beatae doloribus incidunt excepturi. Fugit deleniti accusantium neque hic quidem voluptatibus cumque.</p>
+        </div>
+        <div class="team_member">
+           <div class="member_img">
+             <img src="imgs/member2.png" alt="our_team">
+             <div class="social_media">
+                <div class="github item">
+                    <a href="https://github.com/hxia5" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-github"></i>
+                    </a>
+                  </div>
+                  <div class="gitlab item">
+                    <a href="https://gitlab.com/hxia5" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-gitlab"></i>
+                    </a>
+                  </div>
+                  <div class="email item">
+                    <a href="mailto:harry.xiahc@gmail.com">
+                      <i class="fab fa-pushed"></i> <!-- Changed to the envelope icon -->
+                    </a>
+                  </div>
+                  <div class="linkedin item">
+                    <a href="https://www.linkedin.com/in/haochong-xia-3835371ab/" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-linkedin"></i>
+                    </a>
+                  </div>
+                  
+             </div>
+          </div>
+          <h3>Haochong Xia</h3>
+          <span>Duke Student</span>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores maiores temporibus, architecto optio asperiores mollitia pariatur error, quaerat voluptatibus minima eos quo nostrum, maxime necessitatibus.</p>
+      </div>
+        <div class="team_member">
+           <div class="member_img">
+             <img src="imgs/member3.png" alt="our_team">
+             <div class="social_media">
+                <div class="github item">
+                    <a href="https://github.com/jaxonyue" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-github"></i>
+                    </a>
+                  </div>
+                  <div class="gitlab item">
+                    <a href="https://gitlab.com/jaxonyue" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-gitlab"></i>
+                    </a>
+                  </div>
+                  <div class="email item">
+                    <a href="mailto:jaxon.yue1@gmail.com">
+                      <i class="fab fa-pushed"></i> <!-- Changed to the envelope icon -->
+                    </a>
+                  </div>
+                  <div class="linkedin item">
+                    <a href="https://www.linkedin.com/in/jaxn/" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-linkedin"></i>
+                    </a>
+                  </div>
+                  
+             </div>
+          </div>
+          <h3>Jaxon Yue</h3>
+          <span>Duke Student</span>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione perspiciatis, error deleniti quaerat beatae doloribus incidunt excepturi. Fugit deleniti accusantium neque hic quidem voluptatibus cumque.</p>
+      </div>
+        <div class="team_member">
+           <div class="member_img">
+             <img src="imgs/member4.png" alt="our_team">
+             <div class="social_media">
+                <div class="github item">
+                    <a href="https://github.com/yabeizeng1121" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-github"></i>
+                    </a>
+                  </div>
+                  <div class="gitlab item">
+                    <a href="https://gitlab.com/yabeizeng1121" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-gitlab"></i>
+                    </a>
+                  </div>
+                  <div class="email item">
+                    <a href="mailto:yabeizeng@gmail.com">
+                      <i class="fab fa-pushed"></i> <!-- Changed to the envelope icon -->
+                    </a>
+                  </div>
+                  <div class="linkedin item">
+                    <a href="https://www.linkedin.com/in/yabei-zeng/" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-linkedin"></i>
+                    </a>
+                  </div>
+                  
+             </div>
+          </div>
+          <h3>Yabei Zeng</h3>
+          <span>Duke Student</span>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione perspiciatis, error deleniti quaerat beatae doloribus incidunt excepturi. Fugit deleniti accusantium neque hic quidem voluptatibus cumque.</p>
+      </div>  
+    </div>
+</div>	
+
+</body>
+</html>

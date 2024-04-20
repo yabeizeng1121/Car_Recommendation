@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Car Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Varela&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset */
+        body, h1, h2, h3, p, a {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Navigation Bar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0f0f0f;
+            min-height: 80px;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .button {
+            display: inline-block; /* Correct display type for the button */
+            background-color: #212F3C;
+            color: white;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            box-shadow: none;
+            outline: none;
+            margin-top: 30px;
+        }
+
+        .button:hover {
+            background-color: #A93226;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 0 15px;
+            margin-left: 15px;
+            font-weight: bold;
+        }
+        .hero-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgb(1, 31, 41);
+            padding: 20px;
+            color: white;
+            height: 600px; /* Adjust height as needed */
+        }
+        .text-container {
+            flex: 1;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 2; 
+            left: 10px; 
+        }
+        .text-primary {
+            color: #f05812;
+            font-size: 24px; /* Adjust size as needed */
+        }
+        .text-secondary {
+            font-weight: bold;
+            font-size: 40px; /* Adjust size as needed */
+        }
+        .image-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-container img {
+            width:90%; /* Adjust based on your preference */
+            height: auto;
+            border-radius: 8px
+        }
+
+        .container {
+            margin-left: 30%;
+            margin-right: 30%;
+            padding-top: 20px;
+            height: 800px;
+            text-align: center;
+            line-height: 3;
+            color: #212F3C;
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            height: 100px;
+        }
+
+        .slider-container {
+            margin-bottom: 30px;
+        }
+
+        .slider-label {
+            display: block;
+            text-align: center;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .slider {
+            -webkit-appearance: none; /* Override default CSS styles */
+            appearance: none;
+            width: 100%;
+            height: 10px; /* Set a height for the slider */
+            background: #212f3c;
+            outline: none; /* Remove the outline on focus */
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance:none;
+            width: 25px;
+            height: 25px;
+            background: #212F3C;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .dropdown-row {
+            display: flex;
+            justify-content:safe;
+            margin-bottom: 30px;
+            margin-left: 0px;
+            height: 50px;
+            width: 700px;
+            text-align: center;
+        }
+
+        .dropdown {
+            width: 30%;
+        }
+        .full-width-textarea {
+            width: 100%;
+            /* Any additional styling you want for your textarea */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+    <div>Ultimate Car Finder</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="finder.html">Find My Car</a>
+    </div>
+</div>
+
+<div class="hero-container">
+    <div class="text-container">
+        <div class="text-primary">Discover your ideal car based on your preferences</div>
+        <div class="text-secondary">Find My Car</div>
+    </div>
+    <div class="image-container">
+        <img src="imgs/finder.png" alt="Descriptive Alt Text">
+    </div>
+</div>
+
+<div class="container">
+    <div class="title">
+        <h2>Specify Your Preferences</h2>
+    </div>
+    
+    <!-- Start of the form -->
+    <form id="carFinderForm" action="http://localhost:8080/find_my_car" method="post">
+        <input type="hidden" id="prompt" name="prompt">
+        <div class="slider-container">
+            <label class="slider-label" for="minBudget">Minimum Budget:</label>
+            <input type="range" class="slider" id="minBudget" name="minBudget" min="0" max="100000" step="100" value="20000" oninput="updateSlider(this.value, 'min')">
+            <label class="slider-label" for="maxBudget">Maximum Budget:</label>
+            <input type="range" class="slider" id="maxBudget" name="maxBudget" min="0" max="100000" step="100" value="80000" oninput="updateSlider(this.value, 'max')">
+        </div>
+      
+        <div class="dropdown-row">
+            <select class="dropdown" id="seats" name="seats">
+                <option value="">Select seats</option>
+                <option value="2">2</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="7">7</option>
+            </select>
+      
+            <select class="dropdown" id="engineType" name="engineType">
+                <option value="">Select engine type</option>
+                <option value="petrol">Petrol</option>
+                <option value="diesel">Diesel</option>
+                <option value="hybrid">Hybrid</option>
+                <option value="electric">Electric</option>
+            </select>
+            <select class="dropdown" id="carType" name="carType">
+                <option value="">Select car type</option>
+                <option value="coupe">Coupe</option>
+                <option value="convertible">Convertible</option>
+                <option value="crossover">Crossover</option>
+                <option value="sports_car">Sports Car</option>
+                <option value="jeep">Jeep</option>
+                <option value="luxury">Luxury</option>
+                <option value="hatchback">Hatchback</option>
+                <option value="sedan">Sedan</option>
+                <option value="suv">SUV</option>
+                <option value="minivan">Minivan</option>
+                <option value="wagon">Wagon</option>
+                <option value="truck">Truck</option>
+                <option value="mpv">MPV</option>
+                <option value="hybrid">Hybrid</option>
+                <option value="compact">Compact</option>
+                <option value="estate">Estate</option>
+                <option value="limousine">Limousine</option>
+                <option value="saloon">Saloon</option>
+            </select>
+        </div>
+        <div>
+            <label for="textInput">Additional Preferences</label>
+            <textarea id="textInput" name="textInput" rows="3" class="full-width-textarea" placeholder="Enter car details, e.g., BMW Mpower, 6 inline engine with turbo, coupe."></textarea>
+        </div>
+        
+        <button type="submit">Find My Car</button>
+    </form>
+</div>
+
+  
+<script>
+    function updateSlider(value, type) {
+      var minBudget = document.getElementById('minBudget').value;
+      var maxBudget = document.getElementById('maxBudget').value;
+      
+      // Ensure that min is not greater than max and vice versa
+      if(type === 'min' && parseInt(value) > parseInt(maxBudget)){
+        value = maxBudget;
+        document.getElementById('minBudget').value = value;
+      } else if(type === 'max' && parseInt(value) < parseInt(minBudget)){
+        value = minBudget;
+        document.getElementById('maxBudget').value = value;
+      }
+  
+      document.getElementById('minBudgetLabel').textContent = minBudget;
+      document.getElementById('maxBudgetLabel').textContent = maxBudget;
+    }
+    
+    function findMyCar() {
+      // Functionality to find the car based on preferences
+      console.log("Finding your car...");
+    }
+  
+    function constructPrompt() {
+        const minBudget = document.getElementById('minBudget').value;
+        const maxBudget = document.getElementById('maxBudget').value;
+        const seats = document.getElementById('seats').value;
+        const engineType = document.getElementById('engineType').value;
+        const carType = document.getElementById('carType').value;
+        const additionalPreferences = document.getElementById('textInput').value;
+
+        return `Recommend a${carType} ${seats} seats car with a ${engineType} engine between ${minBudget} and ${maxBudget} dollars. ${additionalPreferences}`;
+    }
+
+   
+    document.getElementById('carFinderForm').onsubmit = async function(event) {
+        event.preventDefault();
+        const prompt = constructPrompt();
+        const response = await fetch(this.action, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ prompt: prompt })
+        });
+        if (response.ok) {
+            window.location.href = '/car.html'; // Redirect to car.html
+        } else {
+            alert('Failed to find car');
+        }
+    };
+</script>
+
+  </script>
+  </body>
+  </html>
+  
+

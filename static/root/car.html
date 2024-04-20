@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Car Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Varela&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset */
+        body, h1, h2, h3, p, a {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Navigation Bar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0f0f0f;
+            min-height: 80px;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .button {
+            display: inline-block; /* Correct display type for the button */
+            background-color: #212F3C;
+            color: white;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            box-shadow: none;
+            outline: none;
+            margin-top: 30px;
+        }
+        .result {
+            width: 80%;
+        }
+
+        .button:hover {
+            background-color: #A93226;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 0 15px;
+            margin-left: 15px;
+            font-weight: bold;
+        }
+        bodY {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            }
+        .center {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fbfafa;
+        }
+        
+
+        .wave {
+            width: 5px;
+            height: 100px;
+            background: linear-gradient(45deg, #212F3C, #7aafe0);
+            margin: 10px;
+            animation: wave 1s linear infinite;
+            border-radius: 20px;
+        }
+        .wave:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        .wave:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+        .wave:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        .wave:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+        .wave:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+        .wave:nth-child(7) {
+            animation-delay: 0.6s;
+        }
+        .wave:nth-child(8) {
+            animation-delay: 0.7s;
+        }
+        .wave:nth-child(9) {
+            animation-delay: 0.8s;
+        }
+        .wave:nth-child(10) {
+            animation-delay: 0.9s;
+        }
+
+        @keyframes wave {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+    <div>Ultimate Car Finder</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="finder.html">Find My Car</a>
+    </div>
+</div>
+
+<div class="center" id="loadingContent">
+    <!-- Waves -->
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+
+    <!-- Loading Text -->
+    <div class="loading-text"></div>
+</div>
+
+<div id="result">
+    <p id="resultText"></p>
+</div>
+
+
+<script>
+    window.onload = function() {
+        const loader = document.getElementById('loadingContent');
+        const result = document.getElementById('result');
+        const resultText = document.getElementById('resultText');
+    
+        // Simulate fetching data
+        setTimeout(() => {  // Assume data is fetched here
+            loader.style.display = 'none';
+            resultText.textContent = 'Here is your recommended car information...'; // Sample text
+            result.style.display = 'block';
+        }, 3000); // Delay for demonstration
+    };
+    </script>
+    
+</body>
+</html>

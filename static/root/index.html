@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Car Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Varela&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset */
+        body, h1, h2, h3, p, a {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Navigation Bar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0f0f0f;
+            min-height: 80px;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .navbar a {
+            color: white;
+            padding: 0 15px;
+            margin-left: 15px;
+            font-weight: bold;
+        }
+        
+        .hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("imgs/car.jpg");
+            background-size: cover;
+            background-position: center;
+            color: #FBEEE6;
+            text-align: left;
+            padding: 20px;
+            display: block;  /* Using block layout */
+            position: relative; /* Needed for absolute positioning of children */
+            height: 500px;
+            font-family: 'Varela', sans-serif;
+        }
+
+        .hero-content {
+            position: absolute;  /* Absolutely positioned content */
+            bottom: 0;           /* Align to the bottom */
+            left: 140px;             /* Align to the left */
+            width: 100%;         /* Full width to respect padding of .hero */
+            padding: 20px;
+            line-height: 2;       /* Optional: add padding if needed */
+        }
+
+        .button {
+            display: inline-block; /* Correct display type for the button */
+            background-color: #212F3C;
+            color: white;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            box-shadow: none;
+            outline: none;
+            margin-top: 30px;
+        }
+
+        .button:hover {
+            background-color: #A93226;
+        }
+
+
+        /* Section Two Styles */
+        #why-choose-us {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #why-choose-us div {
+            flex: 1;
+        }
+
+        #why-choose-us img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+    <div>Ultimate Car Finder</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="finder.html">Find My Car</a>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<div class="hero">
+    <div class="hero-content">
+        <h1>Find Your Perfect Car</h1>
+        <p>Explore top car recommendations tailored just for you</p>
+        <a href="finder.html" class="button">Find Your Car</a>
+    </div>
+</div>
+
+
+<!-- Section Two -->
+<section id="why-choose-us">
+    <!-- Image on the left -->
+    <div>
+        <img src="imgs/img2.png" alt="Night city view">
+    </div>
+  
+    <!-- Content on the right -->
+    <div style="padding-left: 50px;">
+        <h2>Why Choose Ultimate Car Finder?</h2>
+        <div style="margin-top: 30px;">
+            <h3>Custom Recommendations</h3>
+            <p>Receive personalized car suggestions based on your preferences.</p>
+        </div>
+        <div style="margin-top: 30px;">
+            <h3>Wide Range of Options</h3>
+            <p>Filter cars by budget, seats, and engine type.</p>
+        </div>
+        <div style="margin-top: 30px;">
+            <h3>Expert Insights</h3>
+            <p>Leverage our expert reviews to make informed decisions.</p>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
