@@ -190,9 +190,10 @@
     <form id="carFinderForm" action="http://localhost:8080/find_my_car" method="post">
         <input type="hidden" id="prompt" name="prompt">
         <div class="slider-container">
-            <label class="slider-label" for="minBudget">Minimum Budget:</label>
+            <label class="slider-label" for="minBudget">Minimum Budget: $<span id="minBudgetLabel">20000</span></label>
             <input type="range" class="slider" id="minBudget" name="minBudget" min="0" max="100000" step="100" value="20000" oninput="updateSlider(this.value, 'min')">
-            <label class="slider-label" for="maxBudget">Maximum Budget:</label>
+
+            <label class="slider-label" for="maxBudget">Maximum Budget: $<span id="maxBudgetLabel">80000</span></label>
             <input type="range" class="slider" id="maxBudget" name="maxBudget" min="0" max="100000" step="100" value="80000" oninput="updateSlider(this.value, 'max')">
         </div>
       
@@ -246,39 +247,25 @@
   
 <script>
     function updateSlider(value, type) {
-      var minBudget = document.getElementById('minBudget').value;
-      var maxBudget = document.getElementById('maxBudget').value;
-      
-      // Ensure that min is not greater than max and vice versa
-      if(type === 'min' && parseInt(value) > parseInt(maxBudget)){
-        value = maxBudget;
-        document.getElementById('minBudget').value = value;
-      } else if(type === 'max' && parseInt(value) < parseInt(minBudget)){
-        value = minBudget;
-        document.getElementById('maxBudget').value = value;
-      }
-  
-      document.getElementById('minBudgetLabel').textContent = minBudget;
-      document.getElementById('maxBudgetLabel').textContent = maxBudget;
-    }
-    
-    function findMyCar() {
-      // Functionality to find the car based on preferences
-      console.log("Finding your car...");
-    }
-  
-    function constructPrompt() {
-        const minBudget = document.getElementById('minBudget').value;
-        const maxBudget = document.getElementById('maxBudget').value;
-        const seats = document.getElementById('seats').value;
-        const engineType = document.getElementById('engineType').value;
-        const carType = document.getElementById('carType').value;
-        const additionalPreferences = document.getElementById('textInput').value;
+        var minBudget = document.getElementById('minBudget');
+        var maxBudget = document.getElementById('maxBudget');
+        
+        if(type === 'min' && parseInt(value) > parseInt(maxBudget.value)){
+            minBudget.value = maxBudget.value;
+        } else if(type === 'max' && parseInt(value) < parseInt(minBudget.value)){
+            maxBudget.value = minBudget.value;
+        }
 
-        return `Recommend a car for me: ${carType} ${seats} seats car with a ${engineType} engine between ${minBudget} and ${maxBudget} dollars. Additional preferences:${additionalPreferences}.What is the best car?`;
+        // Update labels
+        document.getElementById('minBudgetLabel').textContent = minBudget.value;
+        document.getElementById('maxBudgetLabel').textContent = maxBudget.value;
     }
 
-   
+    window.onload = function() {
+        updateSlider(document.getElementById('minBudget').value, 'min');
+        updateSlider(document.getElementById('maxBudget').value, 'max');
+    };
+
     document.getElementById('carFinderForm').onsubmit = async function(event) {
         event.preventDefault();
         const prompt = constructPrompt();
@@ -295,8 +282,18 @@
         } else {
             alert('Failed to find car');
         }
-
     };
+
+    function constructPrompt() {
+        const minBudget = document.getElementById('minBudget').value;
+        const maxBudget = document.getElementById('maxBudget').value;
+        const seats = document.getElementById('seats').value;
+        const engineType = document.getElementById('engineType').value;
+        const carType = document.getElementById('carType').value;
+        const additionalPreferences = document.getElementById('textInput').value;
+
+        return `Recommend a car for me: ${carType} ${seats} seats car with a ${engineType} engine between ${minBudget} and ${maxBudget} dollars. Additional preferences:${additionalPreferences}. What is the best car?`;
+    }
 </script>
 
   </script>
