@@ -289,7 +289,7 @@
         });
         if (response.ok) {
             response.json().then(data => {
-                sessionStorage.setItem('carResults', data.step1_and_step2);
+                sessionStorage.setItem('carResults', data.steps);
                 window.location.href = '/car.html'; // Redirect to car.html
             });
         } else {

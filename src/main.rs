@@ -9,41 +9,47 @@ use env_logger;
 use serde_json::Value;
 
 #[derive(Deserialize, Debug)]
-
 struct CarQuery {
     prompt: String,
 }
 
 #[derive(Serialize)]
 struct ApiResponse {
-    step1_and_step2: String,
+    steps: String,
 }
 
-async fn handle_find_my_car(query: web::Json<CarQuery>) -> impl Responder {
+#[derive(Deserialize)]
+struct InitialApiResponse {
+    id: String,
+    status: String,
+    urls: ApiUrls,
+}
+
+#[derive(Deserialize)]
+struct ApiUrls {
+    get: String,
+}
+
+async fn handle_find_my_car(client: web::Data<Client>, query: web::Json<CarQuery>) -> impl Responder {
     info!("Received prompt: {:?}", query.prompt);
 
-    match call_model_api(&query.prompt).await {
+    // Pass the shared Client instance to call_model_api
+    match call_model_api(&query.prompt, &client).await {
         Ok(api_response) => {
-            info!("API Response: {:?}", api_response); // Log the full response
-            match serde_json::from_str::<Vec<Value>>(&api_response) { // Parse as Vec<Value> since the response is an array
-                Ok(response_array) => {
-                    if let Some(response_object) = response_array.get(0) { // Get the first object in the array
-                        if let Some(generated_text) = response_object["generated_text"].as_str() { // Now get generated_text from this object
-                            let steps: Vec<&str> = generated_text.split("Step 3/5").collect();
-                            let steps_text = steps.get(0).unwrap_or(&"").to_string();
-                            HttpResponse::Ok().json(ApiResponse { step1_and_step2: steps_text })
-                        } else {
-                            error!("No 'generated_text' found in API response");
-                            HttpResponse::InternalServerError().json("No 'generated_text' found in API response")
-                        }
+            info!("API Response: {:?}", api_response);
+            match serde_json::from_str::<Value>(&api_response) {
+                Ok(response_value) => {
+                    if let Some(output) = response_value["output"].as_array() {
+                        let steps_text: Vec<String> = output.iter().map(|s| s.as_str().unwrap_or("").to_string()).collect();
+                        HttpResponse::Ok().json(ApiResponse { steps: steps_text.join("") })
                     } else {
-                        error!("API response array is empty");
-                        HttpResponse::InternalServerError().json("API response array is empty")
+                        error!("No 'output' found in API response");
+                        HttpResponse::InternalServerError().json("No 'output' found in API response")
                     }
                 },
                 Err(e) => {
-                    error!("Failed to parse API response as JSON array: {:?}", e);
-                    HttpResponse::InternalServerError().json("Failed to parse API response as JSON array")
+                    error!("Failed to parse API response: {:?}", e);
+                    HttpResponse::InternalServerError().json(format!("Failed to parse API response: {:?}", e))
                 }
             }
         },
@@ -54,53 +60,73 @@ async fn handle_find_my_car(query: web::Json<CarQuery>) -> impl Responder {
     }
 }
 
-
-
-async fn call_model_api(prompt: &str) -> Result<String, reqwest::Error> {
+async fn call_model_api(prompt: &str, client: &Client) -> Result<String, String> {
     dotenv().ok();
-    let api_key = env::var("HUGGINGFACE_API_KEY").expect("API key must be set in .env");
+    let api_key = env::var("HUGGINGFACE_API_KEY")
+        .map_err(|e| format!("Error getting API key: {}", e))?;
     
-    let client = Client::new();
-    let model_endpoint = "https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1";
+    let model_endpoint = "https://api.replicate.com/v1/models/mistralai/mistral-7b-instruct-v0.2/predictions";
     
-    client.post(model_endpoint)
+    let response = client.post(model_endpoint)
         .header("Authorization", format!("Bearer {}", api_key))
-        .json(&serde_json::json!({"inputs": prompt}))
+        .json(&serde_json::json!({"input": {"max_new_tokens": 1000,"prompt": prompt}}))
         .send()
-        .await?
-        .text()
         .await
+        .map_err(|e| format!("Network request error: {}", e))?;
+    
+    let response_text = response.text().await
+        .map_err(|e| format!("Failed to read response text: {}", e))?;
+    
+    let initial_api_response: InitialApiResponse = serde_json::from_str(&response_text)
+        .map_err(|e| format!("Failed to deserialize initial API response: {}", e))?;
+    
+    let status_url = initial_api_response.urls.get;
+    let mut final_result = String::new();
+
+    loop {
+        let status_response = client.get(&status_url)
+            .header("Authorization", format!("Bearer {}", api_key))
+            .send()
+            .await
+            .map_err(|e| format!("Network request error: {}", e))?
+            .text()
+            .await
+            .map_err(|e| format!("Failed to read status response text: {}", e))?;
+
+        if status_response.contains("\"status\":\"succeeded\"") {
+            final_result = status_response;
+            break;
+        }
+        tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
+    }
+
+    Ok(final_result)
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    dotenv().ok();
     env_logger::init();
-    HttpServer::new(|| {
+
+    // Initialize an instance of Client to be used across the application
+    let client = Client::new();
+
+    HttpServer::new(move || {
         App::new()
+            .app_data(web::Data::new(client.clone())) // Changed to use .app_data
             .wrap(middleware::Logger::default()) // Logging middleware
-            .service(web::resource("/find_my_car").route(web::post().to(handle_find_my_car)))
+            .service(web::resource("/find_my_car").route(web::post().to(handle_find_my_car))) // Define your route and handler
             .service(fs::Files::new("/static", "static/root").show_files_listing())
             .service(fs::Files::new("/imgs", "static/root/imgs").show_files_listing())
             .service(fs::Files::new("/css", "static/root/css").show_files_listing())  // Serving CSS files
-            // Setup routes for static HTML files
-            .service(web::resource("/").route(web::get().to(|| async {
-                fs::NamedFile::open("static/root/index.html")
-            })))
-            .service(web::resource("/index.html").route(web::get().to(|| async {
-                fs::NamedFile::open("static/root/index.html")
-            })))
-            .service(web::resource("/about.html").route(web::get().to(|| async {
-                fs::NamedFile::open("static/root/about.html")
-            })))
-            .service(web::resource("/finder.html").route(web::get().to(|| async {
-                fs::NamedFile::open("static/root/finder.html")
-            })))
-            .service(web::resource("/car.html").route(web::get().to(|| async {
-                fs::NamedFile::open("static/root/car.html")
-            })))
+            // Routes for static HTML files
+            .service(web::resource("/").route(web::get().to(|| async { fs::NamedFile::open("static/root/index.html") })))
+            .service(web::resource("/index.html").route(web::get().to(|| async { fs::NamedFile::open("static/root/index.html") })))
+            .service(web::resource("/about.html").route(web::get().to(|| async { fs::NamedFile::open("static/root/about.html") })))
+            .service(web::resource("/finder.html").route(web::get().to(|| async { fs::NamedFile::open("static/root/finder.html") })))
+            .service(web::resource("/car.html").route(web::get().to(|| async { fs::NamedFile::open("static/root/car.html") })))
     })
-    .bind("127.0.0.1:8080")?
-    .run()
-    .await
+    .bind("127.0.0.1:8080")? // Bind to the server to localhost:8080
+    .run() // Run the server
+    .await // Await the server's execution
 }
-

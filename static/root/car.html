@@ -27,40 +27,16 @@
             font-weight: bold;
             font-size: 20px;
         }
-        .button {
-            display: inline-block; /* Correct display type for the button */
-            background-color: #212F3C;
-            color: white;
-            padding: 15px 30px;
-            cursor: pointer;
-            font-size: 18px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            transition: background-color 0.3s ease;
-            text-align: center;
-            box-shadow: none;
-            outline: none;
-            margin-top: 30px;
-        }
         .result {
-            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            text-align: center;
+            width: 90%;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
-
-        .button:hover {
-            background-color: #A93226;
-        }
-
-        .navbar a {
-            color: white;
-            padding: 0 15px;
-            margin-left: 15px;
-            font-weight: bold;
-        }
-        bodY {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            }
+        /* Loader Styles */
         .center {
             height: 100vh;
             display: flex;
@@ -68,8 +44,6 @@
             align-items: center;
             background: #fbfafa;
         }
-        
-
         .wave {
             width: 5px;
             height: 100px;
@@ -78,44 +52,19 @@
             animation: wave 1s linear infinite;
             border-radius: 20px;
         }
-        .wave:nth-child(2) {
-            animation-delay: 0.1s;
-        }
-        .wave:nth-child(3) {
-            animation-delay: 0.2s;
-        }
-        .wave:nth-child(4) {
-            animation-delay: 0.3s;
-        }
-        .wave:nth-child(5) {
-            animation-delay: 0.4s;
-        }
-        .wave:nth-child(6) {
-            animation-delay: 0.5s;
-        }
-        .wave:nth-child(7) {
-            animation-delay: 0.6s;
-        }
-        .wave:nth-child(8) {
-            animation-delay: 0.7s;
-        }
-        .wave:nth-child(9) {
-            animation-delay: 0.8s;
-        }
-        .wave:nth-child(10) {
-            animation-delay: 0.9s;
-        }
-
+        .wave:nth-child(2) { animation-delay: 0.1s; }
+        .wave:nth-child(3) { animation-delay: 0.2s; }
+        .wave:nth-child(4) { animation-delay: 0.3s; }
+        .wave:nth-child(5) { animation-delay: 0.4s; }
+        .wave:nth-child(6) { animation-delay: 0.5s; }
+        .wave:nth-child(7) { animation-delay: 0.6s; }
+        .wave:nth-child(8) { animation-delay: 0.7s; }
+        .wave:nth-child(9) { animation-delay: 0.8s; }
+        .wave:nth-child(10) { animation-delay: 0.9s; }
         @keyframes wave {
-            0% {
-                transform: scale(0);
-            }
-            50% {
-                transform: scale(1);
-            }
-            100% {
-                transform: scale(0);
-            }
+            0% { transform: scale(0); }
+            50% { transform: scale(1); }
+            100% { transform: scale(0); }
         }
     </style>
 </head>
@@ -143,33 +92,47 @@
     <div class="wave"></div>
     <div class="wave"></div>
     <div class="wave"></div>
-
-    <!-- Loading Text -->
-    <div class="loading-text"></div>
 </div>
 
-<div id="result">
+<div class="result" id="result" style="display: none;">
     <p id="resultText"></p>
 </div>
 
-
 <script>
-    window.onload = function() {
-        const resultText = document.getElementById('resultText');
-        const loader = document.getElementById('loadingContent');
-        const result = document.getElementById('result');
+document.addEventListener('DOMContentLoaded', function() {
+    const loader = document.getElementById('loadingContent');
+    const resultText = document.getElementById('resultText');
+    const result = document.getElementById('result');
 
-        // Retrieve data from sessionStorage
-        const carResults = sessionStorage.getItem('carResults');
+    // Retrieve the stored results from sessionStorage or directly fetch new data
+    const carResults = sessionStorage.getItem('carResults');
+    if (carResults) {
+        displayResults(carResults);
+    } else {
+        fetchResults();
+    }
 
-        setTimeout(() => {  // Simulate delay
-            loader.style.display = 'none';
-            resultText.textContent = carResults || 'No results found.';
-            result.style.display = 'block';
-        }, 3000);
-    };
+    function displayResults(data) {
+        loader.style.display = 'none';
+        resultText.textContent = data;
+        result.style.display = 'block';
+    }
 
-    </script>
-    
+    function fetchResults() {
+        fetch('/find_my_car', {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(data => {
+            displayResults(data.steps || 'No results found.');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displayResults('Failed to fetch results.');
+        });
+    }
+});
+</script>
+
 </body>
 </html>
