@@ -35,14 +35,24 @@
             font-weight: bold;
         }
         
+        .hero-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 20px;
+            color: white;
+            height: 400px; /* Adjust height as needed */
+        }
         .result {
             margin: 20px auto;
             padding: 20px;
             text-align: center;
-            width: 90%;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
+            width: 70%;
+            background-color: white;
+            /* border: 1px solid ; */
             border-radius: 4px;
+            text-align: left;
         }
         /* Loader Styles */
         .center {
@@ -101,9 +111,11 @@
     <div class="wave"></div>
     <div class="wave"></div>
 </div>
+<div class="hero-container">
+    <img src="css/carlineout.png" alt="Loading Complete" id="resultImage" style="display: none; width: 100%; max-width: 1000px; margin: 0 auto; margin-bottom: 20px;">
 
+</div>
 <div class="result" id="result" style="display: none;">
-    <img src="css/background.gif" alt="Loading Complete" id="resultImage" style="display: none; width: 100%; max-width: 1000px; margin: 0 auto; margin-bottom: 20px;">
     <p id="resultText" style="font-size: 24px;"></p>
 </div>
 

@@ -69,7 +69,7 @@ async fn call_model_api(prompt: &str, client: &Client) -> Result<String, String>
     
     let response = client.post(model_endpoint)
         .header("Authorization", format!("Bearer {}", api_key))
-        .json(&serde_json::json!({"input": {"max_new_tokens": 1000,"prompt": prompt}}))
+        .json(&serde_json::json!({"input": {"max_new_tokens": 500,"prompt": prompt}}))
         .send()
         .await
         .map_err(|e| format!("Network request error: {}", e))?;
