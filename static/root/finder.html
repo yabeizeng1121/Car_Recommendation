@@ -268,21 +268,13 @@
 
     document.getElementById('carFinderForm').onsubmit = async function(event) {
         event.preventDefault();
-        const prompt = constructPrompt();
-        const response = await fetch(this.action, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ prompt: prompt })
-        });
-        if (response.ok) {
-            response.json().then(data => {
-                sessionStorage.setItem('carResults', data.steps);
-                window.location.href = '/car.html'; // Redirect to car.html
-            });
-        } else {
-            alert('Failed to find car');
-        }
+        const prompt = constructPrompt(); // Assume constructPrompt() correctly constructs the prompt string.
+        
+        // Store the prompt in sessionStorage and redirect to car.html
+        sessionStorage.setItem('carPrompt', prompt); // Storing the prompt instead of results
+        window.location.href = '/car.html'; // Redirect to car.html
     };
+    
 
     function constructPrompt() {
         const minBudget = document.getElementById('minBudget').value;

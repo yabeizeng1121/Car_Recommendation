@@ -103,43 +103,52 @@
 </div>
 
 <div class="result" id="result" style="display: none;">
-    <p id="resultText"></p>
+    <img src="css/background.gif" alt="Loading Complete" id="resultImage" style="display: none; width: 100%; max-width: 1000px; margin: 0 auto; margin-bottom: 20px;">
+    <p id="resultText" style="font-size: 24px;"></p>
 </div>
 
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const loader = document.getElementById('loadingContent');
-    const resultText = document.getElementById('resultText');
-    const result = document.getElementById('result');
-
-    // Retrieve the stored results from sessionStorage or directly fetch new data
-    const carResults = sessionStorage.getItem('carResults');
-    if (carResults) {
-        displayResults(carResults);
-    } else {
-        fetchResults();
-    }
-
-    function displayResults(data) {
-        loader.style.display = 'none';
-        resultText.textContent = data;
-        result.style.display = 'block';
-    }
-
-    function fetchResults() {
-        fetch('/find_my_car', {
-            method: 'GET',
-        })
-        .then(response => response.json())
-        .then(data => {
-            displayResults(data.steps || 'No results found.');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            displayResults('Failed to fetch results.');
-        });
-    }
+    // Retrieve the stored results from sessionStorage or directly fetch new data    
+    document.addEventListener('DOMContentLoaded', function() {
+        const loader = document.getElementById('loadingContent');
+        const resultText = document.getElementById('resultText');
+        const result = document.getElementById('result');
+    
+        // Retrieve the stored prompt from sessionStorage
+        const carPrompt = sessionStorage.getItem('carPrompt');
+        
+        if (carPrompt) {
+            fetchResults(carPrompt);
+        } else {
+            displayResults('No prompt provided.');
+        }
+    
+        function displayResults(data) {
+            loader.style.display = 'none';
+            resultImage.style.display = 'block'; // Show the image
+            resultText.textContent = data;
+            result.style.display = 'block';
+        }
+    
+        function fetchResults(prompt) {
+            fetch('/find_my_car', {
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ prompt: prompt })
+            })
+            .then(response => response.json())
+            .then(data => {
+                sessionStorage.setItem('carResults', JSON.stringify(data)); // Optional: store results if needed later
+                displayResults(data.steps || 'No results found.');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                displayResults('Failed to fetch results.');
+            });
+        }
 });
+
 </script>
 
 </body>
