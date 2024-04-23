@@ -5,7 +5,7 @@ use reqwest::Client;
 use dotenv::dotenv;
 use std::env;
 use log::{info, error};
-use env_logger;
+// use env_logger;
 use serde_json::Value;
 
 #[derive(Deserialize, Debug)]
@@ -106,7 +106,7 @@ async fn call_model_api(prompt: &str, client: &Client) -> Result<String, String>
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
-    env_logger::init();
+    // env_logger::init();
 
     // Initialize an instance of Client to be used across the application
     let client = Client::new();
