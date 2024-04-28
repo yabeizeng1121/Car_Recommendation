@@ -1,6 +1,9 @@
 # IDS 721 Final Project
 [![pipeline status](https://gitlab.com/jaxonyue/ids-721-final-project/badges/main/pipeline.svg)](https://gitlab.com/jaxonyue/ids-721-final-project/-/commits/main)
 
+## Gitlab Repo Link
+Please find the GitLab Repo [here](https://gitlab.com/jaxonyue/ids-721-final-project)
+
 ## Team Members
 - Tianji Rao
 - Haochong Xia
